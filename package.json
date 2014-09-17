@@ -1,6 +1,6 @@
 {
   "name": "dat-github-trending",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Imports trending repository data from GitHub into dat every day",
   "main": "index.js",
   "scripts": {
