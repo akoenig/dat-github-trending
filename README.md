@@ -17,7 +17,7 @@ When done, install the hook in your `dat.json`.
 ``` json
 {
   "hooks": {
-    "listen": "dat-npm"
+    "listen": "dat-github-trending"
   }
 }
 ```
