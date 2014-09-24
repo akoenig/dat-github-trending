@@ -2,9 +2,9 @@
 
 GitHub trending data for [dat](https://github.com/maxogden/dat).
 
-dat-github-trending works as a dat listen hook. Install dat, create an empty dat and install `dat-github-trending` afterwards.
+`dat-github-trending` works as a dat listen hook. Install dat, create an empty one and install `dat-github-trending` afterwards.
 
-```
+```sh
 npm install -g dat
 mkdir dat-github-trending
 cd dat-github-trending
@@ -22,7 +22,7 @@ When done, install the hook in your `dat.json`.
 }
 ```
 
-That's all. Execute `dat listen` and the GitHub trending repositories (all languages) will be flow into your dat on every single day.
+That's all. Execute `dat listen` and the GitHub trending repository data (all languages) will be flow into your dat on every single day.
 
 ## License
 
