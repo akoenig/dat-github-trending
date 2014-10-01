@@ -15,26 +15,26 @@
 
 var util = require('util');
 
+var async = require('async');
+var cron = require('node-schedule');
 var dateformat = require('dateformat');
 var trending = require('github-trending');
-var vasync = require('vasync');
 var VError = require('verror');
 
 module.exports = function run (dat, ready) {
 
-    var INTERVAL = 24 * 60 * (60 * 1000); // Every day.
+    var SCHEDULE = {hour: 16, minute: 00}; 
 
     function log () {
         var args = Array.prototype.slice.call(arguments, 0);
 
-        // TODO: Add timestamp
-        args[0] = '[dat-github-trending] ' + args[0];
+        args[0] = '[dat-github-trending] - ' + dateformat(Date.now(), 'dd.mm.yyyy HH:MM:ss') + ' - '  + args[0];
 
         console.log.apply(console, args);
     }
     
     function persist (repository) {
-        return function writer (callback) {
+        return function (callback) {
             var timestamp = dateformat(Date.now(), 'yyyymmdd');
             var key = '%d!%s!%d'; // e.g. 20140902!javascript!0
 
@@ -58,8 +58,8 @@ module.exports = function run (dat, ready) {
     }
 
     function trendy (language) {
-        return function handler (callback) {
-            log('Proceeding: %s', language);
+        return function (callback) {
+            log('Importing: %s', language);
 
             function onFetch (err, repositories) {
                 var tasks = [];
@@ -75,7 +75,7 @@ module.exports = function run (dat, ready) {
                     tasks.push(persist(repository));
                 });
 
-                vasync.waterfall(tasks, callback);
+                async.series(tasks, callback);
             }
 
             trending(language, onFetch);
@@ -85,29 +85,28 @@ module.exports = function run (dat, ready) {
     function run () {
         var workflow = [];
 
-        log('Fetch available language information ...');
+        log('Starting new import cycle ...');
 
         trending.languages(function extract (err, languages) {
             var tasks = [];
 
-            log('Fetched %d language(s).', languages.length);
+            log('Importing trending repositories of %d language(s).', languages.length);
 
             languages.forEach(function (language) {
                 tasks.push(trendy(language));
             });
 
-            vasync.waterfall(tasks, function (err) {
+            async.series(tasks, function (err) {
                 if (err) {
                     return console.error(err);
                 }
 
-
-                
+                log('Done.');
             });
         });
     }
 
     process.nextTick(ready);
 
-    run();
+    cron.scheduleJob(SCHEDULE, run);
 };
