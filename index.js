@@ -23,7 +23,7 @@ var VError = require('verror');
 
 module.exports = function initialize (dat, ready) {
 
-    var SCHEDULE = {hour: process.env.HOUR || 16, minute: process.env.MINUTE || 0};
+    var SCHEDULE = {hour: 1, minute: 0};
 
     function log () {
         var args = Array.prototype.slice.call(arguments, 0);
