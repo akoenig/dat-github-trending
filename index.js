@@ -21,9 +21,9 @@ var dateformat = require('dateformat');
 var trending = require('github-trending');
 var VError = require('verror');
 
-module.exports = function run (dat, ready) {
+module.exports = function initialize (dat, ready) {
 
-    var SCHEDULE = {hour: 16, minute: 00}; 
+    var SCHEDULE = {hour: process.env.HOUR || 16, minute: process.env.MINUTE || 0};
 
     function log () {
         var args = Array.prototype.slice.call(arguments, 0);
@@ -38,7 +38,7 @@ module.exports = function run (dat, ready) {
             var timestamp = dateformat(Date.now(), 'yyyymmdd');
             var key = '%d!%s!%d'; // e.g. 20140902!javascript!0
 
-            function onWrite (err, repository) {
+            function onWrite (err) {
                 if (err) {
                     return callback(new VError(err, 'failed to write the repository entry.'));
                 }
@@ -83,8 +83,6 @@ module.exports = function run (dat, ready) {
     }
 
     function run () {
-        var workflow = [];
-
         log('Starting new import cycle ...');
 
         trending.languages(function extract (err, languages) {
