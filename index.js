@@ -52,7 +52,8 @@ module.exports = function initialize (dat, ready) {
                 title: repository.title,
                 owner: repository.owner,
                 description: repository.description,
-                url: repository.url
+                url: repository.url,
+                timestamp: timestamp
             }, onWrite);
         };
     }
