@@ -53,7 +53,8 @@ module.exports = function initialize (dat, ready) {
                 owner: repository.owner,
                 description: repository.description,
                 url: repository.url,
-                timestamp: timestamp
+                timestamp: timestamp,
+                language: repository.language
             }, onWrite);
         };
     }
